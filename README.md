@@ -39,24 +39,31 @@ To Run:
 ### Create Dataset (Oscillators Folder)
 
 1. Run create_dataset.py -- make sure to toggle "SAVE" if you desire to SAVE the output.
-    This will create .mat files of the 
-    - original dataset (..._original.mat)
-    - shuffled dataset (....mat)
+    This will create use config.cfg to create .mat files of the 
+    - original dataset (3D_data_original.mat)
+    - shuffled dataset (3D_data_shuffled.mat or 3D_data_shuffled.npy)
+    - data_dict_list.pkl: All details for each trajectory
     - labels.mat (containing the true orderings of the shuffled data)
-    in either the folder 
-    - 1_80_100 (for 2D dataset, used for DHPM, PINNS)
-    - 64_80_100 (for 3D dataset, used for DeepONet)
+    - True_K.npy (the K values in order for each simulation run)
+    in either the folder specified by the directory in config.cfg.
+    There are already two datasets available to play with:
+       A) dat0to35_1.08to1.8: This contains a sample run from time = 0 to 35 and K values 1.08 to 1.8. 
+       B) dat0to35_1.08to1.8_real: This contains a sample run from time = 0 to 35 and K values 1.08 to 1.8, but only the real part is retained.
+    Note that (A) has a different shuffling than (B). 
 
 ### Discover Emergent Coordinates
 
 2. Run questionnaires (download code from https://github.com/RonenTalmonLab/InformedGeometry-CoupledPendulum/tree/main)
-   - Load dataset (e.g. 3Dpipe.mat & labels.mat) into Matlab.
-   - Run runQuestionnairesPipe.m (this will use setQuestParamsPipe.m)
+   - Load dataset (e.g. 3D_data_shuffled.mat & labels.mat) into Matlab.
+   - Run runQuestionnairesOscillators.m (this will use setQuestParamsOscillators.m)
    - Three embedding figures will load. 
    - Save embeddings.mat to appropriate Output folder.
-   - Visualize this data in Python by running "visualize_dataset_{N}D.py". Toggle "SAVE"
+   - Post process the embeddings to extract arclengths via postprocessembeddings.py
+   - Visualize this data in Python by running "visualize_dataset.py". Toggle "SAVE"
      to save out the embeddings and concentrations into nice .npy files (three e_vecs & 1 concentration)
 
 ### Create Generative Model
 3. Run Neural Networks
-    - DeepONet: in DeepONet folder, run main_oscillators.py (make_plots_oscillator.py following to produce figures. Results will be saved in DeepONet/Oscillators/CaseNo)
+    - DeepONet: in DeepONet folder, run main_oscillators.py (use path variable in dataset_evecs_oscillators.py to select data source)
+    - To create figures: run make_plots_oscillator.py. Results will be saved in DeepONet/Oscillators/CaseNo.
+    - Ensure data path between make_plots_oscillators and dataset_evecs_oscillators is pointing to the same datasource.
